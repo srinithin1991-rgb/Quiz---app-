@@ -1,3 +1,4 @@
-function showMessage() {
-  alert("Your app is working 🚀");
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
 }
