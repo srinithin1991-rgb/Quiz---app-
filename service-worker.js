@@ -1,13 +1,15 @@
 const CACHE_NAME = "quiz-app-v1";
+
 const urlsToCache = [
+  "./",
   "index.html",
   "style.css",
   "script.js",
   "manifest.json"
 ];
 
-// Install service worker
 self.addEventListener("install", event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(urlsToCache);
@@ -15,7 +17,6 @@ self.addEventListener("install", event => {
   );
 });
 
-// Activate service worker
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys => {
@@ -28,13 +29,13 @@ self.addEventListener("activate", event => {
       );
     })
   );
+
+  self.clients.claim();
 });
 
-// Fetch offline support
 self.addEventListener("fetch", event => {
   event.respondWith(
     caches.match(event.request).then(response => {
       return response || fetch(event.request);
     })
-  );
-});
+  )
